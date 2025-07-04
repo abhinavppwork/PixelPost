@@ -1,14 +1,23 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
+import {useAuth} from "@clerk/clerk-react"
 
 function Articles() {
   const [articles, setArticles] = useState([])
   const [error, setError] = useState('')
   const navigate=useNavigate()
+  const {getToken} = useAuth()
+ 
+
   //get all articles
   async function getArticles() {
-    let res = await axios.get('http://localhost:3000/author-api/articles');
+    const token = await getToken()
+    let res = await axios.get('http://localhost:3000/author-api/articles',{
+      headers:{
+        Authorization:`Bearer ${token}`
+      }
+    });
     if(res.data.message === "articles"){
       setArticles(res.data.payload)
       setError('')

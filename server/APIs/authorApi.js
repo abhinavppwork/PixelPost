@@ -24,13 +24,13 @@ authorApp.get('/unauthorized',(req,res)=>{
     res.send({message:"unauthorized access please login"})
 })
 
-authorApp.put("/article/:articleId",expressAsyncHandler(async(req,res)=>{
+authorApp.put("/article/:articleId",requireAuth({signInUrl:"unauthorized"}),expressAsyncHandler(async(req,res)=>{
 
     //get modified article
     const modifiedArticle = req.body;
     const dbRes = await Article.findByIdAndUpdate(modifiedArticle._id,{ ...modifiedArticle},{returnOriginal:false})
     //send res
-    res.status(200).send({message:"artcile updated",payload:dbRes})
+    res.status(200).send({message:"article updated",payload:dbRes})
 }))
 
 
@@ -39,8 +39,12 @@ authorApp.put("/articles/:articleId",expressAsyncHandler(async(req,res)=>{
 
     //get modified article
     const modifiedArticle = req.body;
-    const dbRes = await Article.findByIdAndUpdate(modifiedArticle._id,{ ...modifiedArticle},{returnOriginal:false})
+
+    const latestArticle = await Article.findByIdAndUpdate(modifiedArticle._id,
+        { ...modifiedArticle },
+        { new:true}
+    )
     //send res
-    res.status(200).send({message:"artcile delete",payload:dbRes})
+    res.status(200).send({message:"artcile deleted or restored",payload:latestArticle})
 }))
 module.exports = authorApp;
