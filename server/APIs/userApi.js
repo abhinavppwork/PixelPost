@@ -12,7 +12,7 @@ userApp.put("/comment/:articleId",expressAsyncHandler(async(req,res)=>{
     //add commentObj to comments array of objs
     const articleWithComments = await Article.findOneAndUpdate({articleId:req.params.articleId},{$push:{comments:commentObj}},{returnOriginal:false});
 
-    res.status(200).send({message:"added comment",payload:articleWithComments});
+    res.status(200).send({message:"comment added",payload:articleWithComments});
 }))
 
 

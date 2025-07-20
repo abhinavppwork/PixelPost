@@ -18,7 +18,7 @@ function Home() {
         firstName: user?.firstName,
         lastName: user?.lastName,
         email: user?.emailAddresses[0].emailAddress,
-        profileImgUrl: user?.imageUrl,
+        profileImageUrl: user?.imageUrl,
       }));
     }
   }, [isLoaded]);

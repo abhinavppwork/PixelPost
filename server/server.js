@@ -1,6 +1,6 @@
 const exp = require("express")
 const app = exp()
-require('dotenv').config(); // this will make all the enviromanet vairables available in the evniromtent to be inside PROCESS.ENV
+require('dotenv').config();
 const userApp = require('./APIs/userApi')
 const authorApp = require("./APIs/authorApi")
 const adminApp = require("./APIs/adminApi")

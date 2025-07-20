@@ -13,10 +13,10 @@ function ArticleByID() {
   const [editArticleStatus, setEditArticleStatus] = useState(false)
   const { register, handleSubmit } = useForm()
   const { getToken } = useAuth()
+  const [articleData, setArticleData] = useState(state)
+  const [commentStatus, setCommentStatus] = useState("")
 
-  const [articleData, setArticleData] = useState(state) // render data from this
-
-  // Save changes
+  // Save article changes
   async function onSave(modifiedArticle) {
     try {
       const articleAfterChanges = { ...articleData, ...modifiedArticle }
@@ -75,6 +75,19 @@ function ArticleByID() {
     )
 
     if (res.data.message === 'article deleted or restored') {
+      setArticleData(res.data.payload)
+    }
+  }
+
+  // Add comment
+  async function addComment(commentObj) {
+    commentObj.nameOfUser = currentUser.firstName
+    const res = await axios.put(
+      `http://localhost:3000/user-api/comment/${articleData.articleId}`,
+      commentObj
+    )
+    if (res.data.message === "comment added") {
+      setCommentStatus("Comment added successfully")
       setArticleData(res.data.payload)
     }
   }
@@ -151,13 +164,20 @@ function ArticleByID() {
                 ))
               )}
             </div>
+
+            {/* Add Comment Form */}
+            {currentUser.role === 'user' && (
+              <form onSubmit={handleSubmit(addComment)}>
+                <h6 className='text-success'>{commentStatus}</h6>
+                <input type="text" {...register("comment")} className="form-control mb-4" />
+                <button className="btn btn-success">Add a comment</button>
+              </form>
+            )}
           </>
         ) : (
           <form onSubmit={handleSubmit(onSave)}>
             <div className="mb-4">
-              <label htmlFor="title" className="form-label">
-                Title
-              </label>
+              <label htmlFor="title" className="form-label">Title</label>
               <input
                 type="text"
                 className="form-control"
@@ -168,9 +188,7 @@ function ArticleByID() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="category" className="form-label">
-                Select a category
-              </label>
+              <label htmlFor="category" className="form-label">Select a category</label>
               <select
                 {...register("category")}
                 id="category"
@@ -184,9 +202,7 @@ function ArticleByID() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="content" className="form-label">
-                Content
-              </label>
+              <label htmlFor="content" className="form-label">Content</label>
               <textarea
                 {...register("content")}
                 className="form-control"
@@ -197,9 +213,7 @@ function ArticleByID() {
             </div>
 
             <div className="text-end">
-              <button type="submit" className="btn btn-success">
-                Save
-              </button>
+              <button type="submit" className="btn btn-success">Save</button>
             </div>
           </form>
         )}
@@ -209,3 +223,4 @@ function ArticleByID() {
 }
 
 export default ArticleByID
+ 
