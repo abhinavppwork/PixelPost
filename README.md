@@ -25,17 +25,3 @@ A **full-stack blog application** built using the **MERN stack (MongoDB, Express
 
 ---
 
-## 📂 Project Structure
-MERN-Blog-App/
-├── backend/ # Express server & API routes
-│ ├── models/ # MongoDB models
-│ ├── routes/ # API routes
-│ └── server.js # Entry point
-├── frontend/ # React app
-│ ├── src/
-│ │ ├── components/
-│ │ ├── pages/
-│ │ └── App.js
-├── .env # Environment variables
-├── package.json
-└── README.md
