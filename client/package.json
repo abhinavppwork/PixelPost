@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.32.3",
+    "@splinetool/react-spline": "^4.1.0",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
+    "bootstrap-icons": "^1.13.1",
+    "firebase": "^12.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.59.0",

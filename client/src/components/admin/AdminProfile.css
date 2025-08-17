@@ -1,0 +1,449 @@
+
+  body {
+    background-color: var(--bg);
+    color: var(--light);
+  }
+  
+  /* Admin Dashboard container */
+  .admin-dashboard {
+    min-height: 100vh;
+    background-color: var(--bg);
+  }
+  
+  .admin-container {
+    padding: 1rem 1rem 1.5rem 1rem;
+    max-width: 1250px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+  /* Header styles */
+/* Responsive header */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+  .admin-title {
+    color: var(--light);
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+  }
+  
+  .admin-subtitle {
+    color: var(--text-pink);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  .admin-badge {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--dark);
+    border-radius: 0.5rem;
+    color: var(--light);
+  }
+  
+  .admin-badge-icon {
+    margin-right: 0.5rem;
+    color: var(--bg-pink);
+  }
+  
+  /* Error message */
+  .admin-error {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    background-color: rgba(245, 101, 101, 0.1);
+    border: 1px solid var(--text-pink);
+    display: flex;
+    align-items: center;
+  }
+  
+  .admin-error-icon {
+    margin-right: 0.5rem;
+    color: var(--text-pink);
+  }
+  
+  .admin-error-message {
+    color: var(--text-pink);
+    margin: 0;
+  }
+  
+  /* Loading state */
+  .admin-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--bg);
+  }
+  
+  .admin-loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .admin-loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    animation: spin 1s linear infinite;
+    color: var(--text-pink);
+  }
+  
+  .admin-loading-text {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    color: var(--light);
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Table styles */
+  .admin-table-container {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    background-color: var(--dark);
+  }
+  .admin-table {
+    width: 100%;
+    min-width: 650px; /* Ensures content doesn't get too squished */
+}
+  
+  .admin-table th {
+    padding: 1rem;
+    text-align: left;
+    color: var(--bg-pink);
+    border-bottom: 1px solid rgba(235, 235, 245, 0.1);
+    font-weight: 600;
+  }
+  
+  .admin-table th:last-child {
+    text-align: right;
+  }
+  
+  .admin-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(235, 235, 245, 0.05);
+  }
+  
+  .admin-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .admin-table td:last-child {
+    text-align: right;
+  }
+  
+  /* User row styles */
+  .admin-user {
+    display: flex;
+    align-items: center;
+  }
+  
+  .admin-user-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+  }
+  
+  .admin-user-avatar-icon {
+    color: var(--light);
+  }
+  
+  .admin-user-name {
+    color: var(--light);
+  }
+  
+  .admin-user-email {
+    color: var(--light);
+  }
+  
+  /* Role badge */
+  .admin-role-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .admin-role-badge.admin {
+    background-color: rgba(245, 101, 101, 0.2);
+    color: var(--text-pink);
+  }
+  
+  .admin-role-badge.user {
+    background-color: rgba(235, 235, 245, 0.1);
+    color: var(--light);
+  }
+  
+  /* Status indicator */
+  .admin-status {
+    display: flex;
+    align-items: center;
+  }
+  
+  .admin-status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+  
+  .admin-status-dot.active {
+    background-color: #10B981; /* Green */
+  }
+  
+  .admin-status-dot.blocked {
+    background-color: var(--text-pink);
+  }
+  
+  .admin-status-text {
+    color: var(--light);
+  }
+  
+  /* Action buttons */
+  .admin-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .admin-action-button:hover {
+    opacity: 0.9;
+  }
+  
+  .admin-action-button.block {
+    background-color: var(--text-pink);
+    color: var(--dark);
+    border: none;
+  }
+  
+  .admin-action-button.enable {
+    background-color: rgba(245, 101, 101, 0.2);
+    color: var(--bg-pink);
+    border: 1px solid var(--text-pink);
+  }
+  
+  .admin-action-button-icon {
+    margin-right: 0.25rem;
+  }
+  
+  /* Empty state */
+  .admin-empty-state {
+    padding: 2rem;
+    text-align: center;
+    color: var(--light);
+  }
+
+
+/* Basic responsive container */
+
+
+
+
+/* Responsive table container */
+
+/* Make sure the table spans the full width of its container */
+
+
+/* Responsive form elements */
+input, select, button {
+    max-width: 100%;
+}
+
+/* Responsive media queries */
+@media (max-width: 1024px) {
+    .admin-container {
+        padding: 1.25rem;
+    }
+    
+    .admin-title {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .admin-badge {
+        margin-top: 0.5rem;
+        align-self: flex-start;
+    }
+    
+    .admin-table th, 
+    .admin-table td {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .admin-action-button {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .admin-user-avatar {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-container {
+        padding: 1rem;
+    }
+    
+    .admin-title {
+        font-size: 1.5rem;
+    }
+    
+    .admin-badge {
+        padding: 0.375rem 0.625rem;
+        font-size: 0.75rem;
+    }
+    
+    .admin-table {
+        min-width: 500px;
+    }
+    
+    .admin-error {
+        padding: 0.75rem;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .admin-error-icon {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+    
+    .admin-user {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .admin-user-avatar {
+        margin-right: 0;
+    }
+}
+
+
+/* Tab Navigation Styles */
+.admin-tabs {
+  display: flex;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--dark);
+  gap: 0.5rem;
+}
+
+.admin-tab {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  background: var(--dark);
+  color: var(--light);
+  border: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-tab:hover {
+  background: rgba(22, 22, 24, 0.8);
+}
+
+.admin-tab.active {
+  background: var(--bg);
+  color: var(--text-pink);
+  border-bottom: 2px solid var(--text-pink);
+}
+
+.admin-tab-icon {
+  margin-right: 0.5rem;
+  stroke: currentColor;
+}
+
+.admin-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  background: var(--bg);
+  color: var(--light);
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  min-width: 1.5rem;
+}
+
+.admin-tab.active .admin-tab-count {
+  background: var(--text-pink);
+  color: var(--dark);
+}
+
+/* Action Button Styles */
+.admin-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.admin-refresh-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--light);
+  border: 1px solid var(--light);
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-refresh-button:hover {
+  background: rgba(235, 235, 245, 0.1);
+}
+
+.admin-refresh-button:active {
+  transform: scale(0.98);
+}
+
+.admin-refresh-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-refresh-button svg {
+  stroke: currentColor;
+}

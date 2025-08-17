@@ -3,24 +3,20 @@ import "bootstrap/dist/css/bootstrap.css";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
-import { ClerkProvider } from "@clerk/clerk-react";
 
+import AdminDashboard from "./components/admin/AdminDashboard.jsx";
+import AdminProfile from "./components/admin/AdminProfile.jsx";
 import Rootlayout from "./components/RootLayout.jsx";
 import Home from "./components/common/Home.jsx";
-import Signin from "./components/common/Signin.jsx";
-import Signup from "./components/common/Signup.jsx";
+import Signin from "./components/common/Signin.jsx"; // ✅ Now this should use Firebase Sign-In
+import Signup from "./components/common/Signup.jsx"; // ✅ Or remove if not needed
 import UserProfile from "./components/user/UserProfile.jsx";
 import AuthorProfile from "./components/author/AuthorProfile.jsx";
 import Articles from "./components/common/Articles.jsx";
 import ArticleByID from "./components/common/ArticleByID.jsx";
 import PostArticle from "./components/author/PostArticle.jsx";
 import UserAuthorContext from "./contexts/userAuthorContext.jsx";
-
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Clerk Publishable Key");
-}
+import { AdminRoute } from "./components/RouteProtection.jsx";
 
 const browserRouterObj = createBrowserRouter(
   [
@@ -29,8 +25,32 @@ const browserRouterObj = createBrowserRouter(
       element: <Rootlayout />,
       children: [
         { path: "", element: <Home /> },
-        { path: "signin", element: <Signin /> },
-        { path: "signup", element: <Signup /> },
+        { path: "signin", element: <Signin /> }, // ✅ Firebase Sign-In Page
+        { path: "signup", element: <Signup /> }, // ✅ Optional if using email/password
+        {
+          path: "admin-dashboard",
+          element: (
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          ),
+        },
+        {
+          path: "admin-profile",
+          element: (
+            <AdminRoute>
+              <AdminProfile />
+            </AdminRoute>
+          ),
+        },
+        {
+          path: "admin-profile/:email",
+          element: (
+            <AdminRoute>
+              <AdminProfile />
+            </AdminRoute>
+          ),
+        },
         {
           path: "user-profile/:email",
           element: <UserProfile />,
@@ -62,15 +82,13 @@ const browserRouterObj = createBrowserRouter(
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <UserAuthorContext>
-        <RouterProvider
-          router={browserRouterObj}
-          future={{
-            v7_startTransition: true,
-          }}
-        />
-      </UserAuthorContext>
-    </ClerkProvider>
+    <UserAuthorContext>
+      <RouterProvider
+        router={browserRouterObj}
+        future={{
+          v7_startTransition: true,
+        }}
+      />
+    </UserAuthorContext>
   </StrictMode>
 );

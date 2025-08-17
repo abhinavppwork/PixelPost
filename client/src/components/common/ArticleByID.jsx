@@ -1,226 +1,425 @@
-import { useContext, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { userAuthorContextObj } from "../../contexts/userAuthorContext"
-import { FaEdit } from 'react-icons/fa'
-import { MdDelete, MdRestore } from 'react-icons/md'
-import { useForm } from 'react-hook-form'
-import { useAuth } from '@clerk/clerk-react'
-import axios from 'axios'
+import { useContext, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { userAuthorContextObj } from "../../contexts/userAuthorContext";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete, MdRestore } from "react-icons/md";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebaseconfigurations/config";
+import DefaultAvatar from "../../assets/Pixel.png";
+import "./ArticleByID.css";
 
 function ArticleByID() {
-  const { state } = useLocation()
-  const { currentUser } = useContext(userAuthorContextObj)
-  const [editArticleStatus, setEditArticleStatus] = useState(false)
-  const { register, handleSubmit } = useForm()
-  const { getToken } = useAuth()
-  const [articleData, setArticleData] = useState(state)
-  const [commentStatus, setCommentStatus] = useState("")
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const { currentUser } = useContext(userAuthorContextObj);
+  const [firebaseUser, setFirebaseUser] = useState(null);
+  const [editArticleStatus, setEditArticleStatus] = useState(false);
+  const { register, handleSubmit, reset } = useForm();
+  const [articleData, setArticleData] = useState(state);
+  const [commentStatus, setCommentStatus] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Save article changes
+  // ✅ Track Firebase Auth state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setFirebaseUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // ✅ If user not signed in, redirect to login or show message
+  if (!firebaseUser) {
+    return (
+      <div className="article-container">
+        <div className="auth-required">
+          <h2>Authentication Required</h2>
+          <p>Please log in to view or edit this article.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ Save article changes
   async function onSave(modifiedArticle) {
     try {
-      const articleAfterChanges = { ...articleData, ...modifiedArticle }
-      const token = await getToken()
-      const currentDate = new Date()
+      setLoading(true);
+      const articleAfterChanges = { ...articleData, ...modifiedArticle };
+      const token = await firebaseUser.getIdToken();
+      const currentDate = new Date();
 
       articleAfterChanges.dateOfModification =
-        currentDate.getDate() + "-" + currentDate.getMonth() + "-" + currentDate.getFullYear()
+        currentDate.getDate() +
+        "-" +
+        (currentDate.getMonth() + 1) +
+        "-" +
+        currentDate.getFullYear();
 
       const res = await axios.put(
         `http://localhost:3000/author-api/article/${articleAfterChanges.articleId}`,
         articleAfterChanges,
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
-      )
+      );
 
-      if (res.data.message === 'article updated') {
-        setEditArticleStatus(false)
-        setArticleData(res.data.payload)
+      if (res.data.message === "article updated") {
+        setEditArticleStatus(false);
+        setArticleData(res.data.payload);
       } else {
-        console.log("Unexpected response:", res.data)
+        console.log("Unexpected response:", res.data);
       }
     } catch (err) {
-      console.error("Error occurred while saving article:", err.response?.data || err.message || err)
+      console.error(
+        "Error occurred while saving article:",
+        err.response?.data || err.message || err
+      );
+    } finally {
+      setLoading(false);
     }
   }
 
   function enableEdit() {
-    setEditArticleStatus(true)
+    setEditArticleStatus(true);
   }
 
-  // Delete article
+  function cancelEdit() {
+    setEditArticleStatus(false);
+    reset();
+  }
+
+  // ✅ Delete article
   async function deleteArticle() {
-    const updatedArticle = { ...articleData, isArticleActive: false }
+    try {
+      setLoading(true);
+      const updatedArticle = { ...articleData, isArticleActive: false };
+      const token = await firebaseUser.getIdToken();
 
-    const res = await axios.put(
-      `http://localhost:3000/author-api/articles/${updatedArticle.articleId}`,
-      updatedArticle
-    )
+      const res = await axios.put(
+        `http://localhost:3000/author-api/articles/${updatedArticle.articleId}`,
+        updatedArticle,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    if (res.data.message === 'article deleted or restored') {
-      setArticleData(res.data.payload)
+      if (res.data.message === "article deleted or restored") {
+        setArticleData(res.data.payload);
+      }
+    } catch (err) {
+      console.error("Error deleting article:", err);
+    } finally {
+      setLoading(false);
     }
   }
 
-  // Restore article
+  // ✅ Restore article
   async function restoreArticle() {
-    const updatedArticle = { ...articleData, isArticleActive: true }
+    try {
+      setLoading(true);
+      const updatedArticle = { ...articleData, isArticleActive: true };
+      const token = await firebaseUser.getIdToken();
 
-    const res = await axios.put(
-      `http://localhost:3000/author-api/articles/${updatedArticle.articleId}`,
-      updatedArticle
-    )
+      const res = await axios.put(
+        `http://localhost:3000/author-api/articles/${updatedArticle.articleId}`,
+        updatedArticle,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    if (res.data.message === 'article deleted or restored') {
-      setArticleData(res.data.payload)
+      if (res.data.message === "article deleted or restored") {
+        setArticleData(res.data.payload);
+      }
+    } catch (err) {
+      console.error("Error restoring article:", err);
+    } finally {
+      setLoading(false);
     }
   }
 
-  // Add comment
+  // ✅ Add comment
   async function addComment(commentObj) {
-    commentObj.nameOfUser = currentUser.firstName
-    const res = await axios.put(
-      `http://localhost:3000/user-api/comment/${articleData.articleId}`,
-      commentObj
-    )
-    if (res.data.message === "comment added") {
-      setCommentStatus("Comment added successfully")
-      setArticleData(res.data.payload)
+    try {
+      setLoading(true);
+      commentObj.nameOfUser = currentUser.firstName || firebaseUser.displayName;
+      const token = await firebaseUser.getIdToken();
+
+      const res = await axios.put(
+        `http://localhost:3000/user-api/comment/${articleData.articleId}`,
+        commentObj,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.data.message === "comment added") {
+        setCommentStatus("Comment added successfully");
+        setArticleData(res.data.payload);
+        reset();
+        setTimeout(() => setCommentStatus(""), 3000);
+      }
+    } catch (err) {
+      console.error("Error adding comment:", err);
+      setCommentStatus("Failed to add comment. Please try again.");
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <div>
-      <div className='container'>
-        {editArticleStatus === false ? (
-          <>
-            {/* Article Header */}
-            <div className="mb-4 w-100 p-4 rounded-3 bg-light shadow d-flex justify-content-between align-items-center flex-wrap">
-              <div className="mb-3">
-                <h2 className="fw-semibold">{articleData.title}</h2>
-                <div>
-                  <small className="text-secondary me-3">
-                    Created on: {articleData.dateOfCreation}
-                  </small>
-                  <small className="text-secondary">
-                    Modified on: {articleData.dateOfModification}
-                  </small>
-                </div>
+    <div className="article-container">
+      {/* Navigation */}
+      <div className="navigation-section">
+        <button
+          type="button"
+          className="back-button"
+          onClick={() => navigate("../articles")}
+        >
+          <span className="back-arrow">←</span>
+          Back to Articles
+        </button>
+      </div>
+
+      {editArticleStatus === false ? (
+        <div className="article-view">
+          {/* Article Header */}
+          <div className="article-header">
+            <div className="article-meta">
+              <span
+                className={`category-badge ${
+                  articleData?.category
+                    ? articleData.category.toLowerCase() === "programming"
+                      ? "category-programming"
+                      : articleData.category.toLowerCase() === "ai&ml"
+                      ? "category-ai-ml"
+                      : articleData.category.toLowerCase() === "database"
+                      ? "category-database"
+                      : "category-default"
+                    : "category-default"
+                }`}
+              >
+                {articleData?.category?.toLowerCase() === "ai&ml"
+                  ? "AI&ML"
+                  : (articleData?.category || "").charAt(0).toUpperCase() + (articleData?.category || "").slice(1)}
+              </span>
+              <h1 className="article-title">{articleData.title}</h1>
+              <div className="article-dates">
+                <span className="date-item">
+                  <strong>Created:</strong> {articleData.dateOfCreation}
+                </span>
+                <span className="date-item">
+                  <strong>Modified:</strong> {articleData.dateOfModification}
+                </span>
               </div>
-
-              {/* Author + Buttons */}
-              <div className="d-flex align-items-center flex-wrap">
-                <div className="text-center me-3">
-                  <img
-                    src={articleData.authorData.profileImageUrl}
-                    width="60"
-                    height="60"
-                    className="rounded-circle mb-1"
-                    alt="Author"
-                  />
-                  <p className="mb-0 small">{articleData.authorData.nameOfAuthor}</p>
+              {!articleData.isArticleActive && (
+                <div className="status-badge deleted">
+                  Article Deleted
                 </div>
-
-                {currentUser.role === 'author' && (
-                  <div className="d-flex">
-                    <button className="btn btn-outline-warning me-2" onClick={enableEdit}>
-                      <FaEdit />
-                    </button>
-                    {articleData.isArticleActive ? (
-                      <button className="btn btn-outline-danger me-2" onClick={deleteArticle}>
-                        <MdDelete className="fs-5" />
-                      </button>
-                    ) : (
-                      <button className="btn btn-outline-info me-2" onClick={restoreArticle}>
-                        <MdRestore className="fs-5" />
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Article Content */}
-            <div className="mb-5">
-              <p className="fs-5" style={{ whiteSpace: 'pre-line' }}>
-                {articleData.content}
-              </p>
-            </div>
-
-            {/* Comments Section */}
-            <div className="mb-5">
-              <h4 className="mb-3">Comments</h4>
-              {articleData.comments.length === 0 ? (
-                <p className="text-muted">No comments yet...</p>
-              ) : (
-                articleData.comments.map(commentObj => (
-                  <div key={commentObj._id} className="mb-3 border-bottom pb-2">
-                    <p className="fw-bold mb-1">{commentObj?.nameOfUser}</p>
-                    <p className="mb-0">{commentObj?.comment}</p>
-                  </div>
-                ))
               )}
             </div>
 
-            {/* Add Comment Form */}
-            {currentUser.role === 'user' && (
-              <form onSubmit={handleSubmit(addComment)}>
-                <h6 className='text-success'>{commentStatus}</h6>
-                <input type="text" {...register("comment")} className="form-control mb-4" />
-                <button className="btn btn-success">Add a comment</button>
-              </form>
+            <div className="author-actions">
+              <div className="author-info">
+                <img
+                  src={articleData.authorData.profileImageUrl || DefaultAvatar}
+                  className="author-avatar"
+                  alt="Author"
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
+                  loading="lazy"
+                  onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = DefaultAvatar; }}
+                />
+                <div className="author-details">
+                  <span className="author-name">{articleData.authorData.nameOfAuthor}</span>
+                  <span className="author-label">Author</span>
+                </div>
+              </div>
+
+              {currentUser.role === "author" && (
+                <div className="action-buttons">
+                  <button 
+                    className="action-btn edit-btn" 
+                    onClick={enableEdit}
+                    disabled={loading}
+                  >
+                    <FaEdit />
+                    <span>Edit</span>
+                  </button>
+                  {articleData.isArticleActive ? (
+                    <button 
+                      className="action-btn delete-btn" 
+                      onClick={deleteArticle}
+                      disabled={loading}
+                    >
+                      <MdDelete />
+                      <span>Delete</span>
+                    </button>
+                  ) : (
+                    <button 
+                      className="action-btn restore-btn" 
+                      onClick={restoreArticle}
+                      disabled={loading}
+                    >
+                      <MdRestore />
+                      <span>Restore</span>
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Article Content */}
+          <div className="article-content">
+            <div className="content-wrapper">
+              <p className="content-text">{articleData.content}</p>
+            </div>
+          </div>
+
+          {/* Comments Section */}
+          <div className="comments-section">
+            <h3 className="section-title">
+              Comments ({articleData.comments.length})
+            </h3>
+            
+            {articleData.comments.length === 0 ? (
+              <div className="no-comments">
+                <p>No comments yet. Be the first to share your thoughts!</p>
+              </div>
+            ) : (
+              <div className="comments-list">
+                {articleData.comments.map((commentObj, index) => (
+                  <div key={commentObj._id || index} className="comment-item">
+                    <div className="comment-header">
+                      <span className="commenter-name">{commentObj?.nameOfUser}</span>
+                    </div>
+                    <p className="comment-text">{commentObj?.comment}</p>
+                  </div>
+                ))}
+              </div>
             )}
-          </>
-        ) : (
-          <form onSubmit={handleSubmit(onSave)}>
-            <div className="mb-4">
-              <label htmlFor="title" className="form-label">Title</label>
+          </div>
+
+          {/* Add Comment Form */}
+          {currentUser.role === "user" && (
+            <div className="add-comment-section">
+              <h4 className="section-title">Add Your Comment</h4>
+              {commentStatus && (
+                <div className={`status-message ${commentStatus.includes('Failed') ? 'error' : 'success'}`}>
+                  {commentStatus}
+                </div>
+              )}
+              <form onSubmit={handleSubmit(addComment)} className="comment-form">
+                <div className="form-group">
+                  <textarea
+                    {...register("comment", { required: true })}
+                    className="comment-input"
+                    placeholder="Share your thoughts about this article..."
+                    rows="4"
+                  />
+                </div>
+                <button 
+                  type="submit" 
+                  className="submit-comment-btn"
+                  disabled={loading}
+                >
+                  {loading ? "Adding..." : "Add Comment"}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="article-edit">
+          <div className="edit-header">
+            <h2>Edit Article</h2>
+            <p>Make changes to your article content</p>
+          </div>
+
+          <form onSubmit={handleSubmit(onSave)} className="edit-form">
+            <div className="form-group">
+              <label htmlFor="title" className="form-label">
+                Article Title
+              </label>
               <input
                 type="text"
-                className="form-control"
+                className="form-input"
                 id="title"
                 defaultValue={articleData.title}
-                {...register("title")}
+                {...register("title", { required: true })}
               />
             </div>
 
-            <div className="mb-4">
-              <label htmlFor="category" className="form-label">Select a category</label>
+            <div className="form-group">
+              <label htmlFor="category" className="form-label">
+                Category
+              </label>
               <select
-                {...register("category")}
+                {...register("category", { required: true })}
                 id="category"
                 className="form-select"
                 defaultValue={articleData.category}
               >
                 <option value="programming">Programming</option>
-                <option value="AI&ML">AI&ML</option>
+                <option value="AI&ML">AI & Machine Learning</option>
                 <option value="database">Database</option>
               </select>
             </div>
 
-            <div className="mb-4">
-              <label htmlFor="content" className="form-label">Content</label>
+            <div className="form-group">
+              <label htmlFor="content" className="form-label">
+                Article Content
+              </label>
               <textarea
-                {...register("content")}
-                className="form-control"
+                {...register("content", { required: true })}
+                className="form-textarea"
                 id="content"
-                rows="10"
+                rows="12"
                 defaultValue={articleData.content}
-              ></textarea>
+                placeholder="Write your article content here..."
+              />
             </div>
 
-            <div className="text-end">
-              <button type="submit" className="btn btn-success">Save</button>
+            <div className="form-actions">
+              <button 
+                type="button" 
+                className="cancel-btn" 
+                onClick={cancelEdit}
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button 
+                type="submit" 
+                className="save-btn"
+                disabled={loading}
+              >
+                {loading ? "Saving..." : "Save Changes"}
+              </button>
             </div>
           </form>
-        )}
-      </div>
+        </div>
+      )}
+
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
-export default ArticleByID
- 
+export default ArticleByID;

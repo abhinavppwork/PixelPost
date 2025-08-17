@@ -1,0 +1,540 @@
+/* Signup.css - Ultra Modern Black & White Design */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.signup-page {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    height: 100vh;
+    background: #ffffff;
+    color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    margin-top: 0;
+}
+
+/* Animated Background Pattern */
+.bg-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.floating-square {
+    position: absolute;
+    background: #000000;
+    border-radius: 4px;
+    opacity: 0.03;
+    animation: floatSquare 20s linear infinite;
+}
+
+.floating-square:nth-child(1) {
+    width: 60px;
+    height: 60px;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 15s;
+}
+
+.floating-square:nth-child(2) {
+    width: 40px;
+    height: 40px;
+    top: 30%;
+    right: 20%;
+    animation-delay: 3s;
+    animation-duration: 18s;
+}
+
+.floating-square:nth-child(3) {
+    width: 80px;
+    height: 80px;
+    top: 60%;
+    left: 15%;
+    animation-delay: 6s;
+    animation-duration: 22s;
+}
+
+.floating-square:nth-child(4) {
+    width: 50px;
+    height: 50px;
+    top: 20%;
+    right: 40%;
+    animation-delay: 9s;
+    animation-duration: 16s;
+}
+
+.floating-square:nth-child(5) {
+    width: 70px;
+    height: 70px;
+    bottom: 20%;
+    right: 15%;
+    animation-delay: 12s;
+    animation-duration: 20s;
+}
+
+.floating-square:nth-child(6) {
+    width: 35px;
+    height: 35px;
+    bottom: 40%;
+    left: 30%;
+    animation-delay: 15s;
+    animation-duration: 14s;
+}
+
+@keyframes floatSquare {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.03;
+    }
+    25% {
+        opacity: 0.08;
+    }
+    50% {
+        transform: translateY(-30px) rotate(180deg);
+        opacity: 0.05;
+    }
+    75% {
+        opacity: 0.02;
+    }
+    100% {
+        transform: translateY(0px) rotate(360deg);
+        opacity: 0.03;
+    }
+}
+
+/* Grid Overlay */
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Main Container */
+.signup-container {
+    background: #ffffff;
+    border: 3px solid #000000;
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 
+        0 0 0 1px #000000,
+        0 20px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 480px;
+    width: 90%;
+    position: relative;
+    z-index: 10;
+    animation: slideInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Signup Content */
+.signup-content {
+    margin-bottom: 1.5rem;
+}
+
+.signup-header {
+    margin-bottom: 2rem;
+}
+
+.signup-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.signup-subtitle {
+    color: #666666;
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+/* Error Message */
+.error-message {
+    background: #f8f8f8;
+    border: 2px solid #000000;
+    color: #000000;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+    animation: shakeIn 0.6s ease-out;
+}
+
+.error-icon {
+    width: 24px;
+    height: 24px;
+    background: #000000;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+@keyframes shakeIn {
+    0% {
+        transform: translateX(-10px);
+        opacity: 0;
+    }
+    25% {
+        transform: translateX(10px);
+    }
+    50% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Form Styles */
+.signup-form {
+    margin-bottom: 2rem;
+}
+
+/* Google Signup Button */
+.google-signup-btn {
+    width: 100%;
+    padding: 1.125rem 2rem;
+    background: #000000;
+    color: #ffffff;
+    border: 3px solid #000000;
+    border-radius: 16px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 1.5rem;
+}
+
+.google-signup-btn:hover:not(:disabled) {
+    background: #ffffff;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.google-signup-btn:active:not(:disabled) {
+    transform: translateY(0);
+    transition-duration: 0.1s;
+}
+
+.google-signup-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    position: relative;
+    z-index: 2;
+    transition: opacity 0.3s ease;
+}
+
+.google-signup-btn.loading .btn-content {
+    opacity: 0;
+}
+
+.google-icon {
+    width: 24px;
+    height: 24px;
+    background: #ffffff;
+    color: #000000;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.google-signup-btn:hover .google-icon {
+    background: #000000;
+    color: #ffffff;
+}
+
+.google-logo {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-text {
+    flex: 1;
+    text-align: center;
+}
+
+.btn-arrow {
+    font-size: 1.25rem;
+    transition: transform 0.3s ease;
+}
+
+.google-signup-btn:hover .btn-arrow {
+    transform: translateX(4px);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+
+.spinner-ring {
+    width: 24px;
+    height: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: spinRing 1s linear infinite;
+}
+
+@keyframes spinRing {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Footer */
+.signup-footer {
+    border-top: 2px solid #000000;
+    padding-top: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.signup-footer p {
+    color: #666666;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    color: #000000;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+}
+
+.link-btn:hover {
+    opacity: 0.7;
+}
+
+/* Corner Decorations */
+.corner-decoration {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border: 2px solid #000000;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.corner-decoration.top-left {
+    top: 2rem;
+    left: 2rem;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 16px 0 0 0;
+}
+
+.corner-decoration.top-right {
+    top: 2rem;
+    right: 2rem;
+    border-left: none;
+    border-bottom: none;
+    border-radius: 0 16px 0 0;
+}
+
+.corner-decoration.bottom-left {
+    bottom: 2rem;
+    left: 2rem;
+    border-right: none;
+    border-top: none;
+    border-radius: 0 0 0 16px;
+}
+
+.corner-decoration.bottom-right {
+    bottom: 2rem;
+    right: 2rem;
+    border-left: none;
+    border-top: none;
+    border-radius: 0 0 16px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .signup-container {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+        max-width: 400px;
+        width: 95%;
+    }
+    
+    .signup-title {
+        font-size: 2rem;
+    }
+    
+    .corner-decoration {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .corner-decoration.top-left,
+    .corner-decoration.top-right {
+        top: 1rem;
+    }
+    
+    .corner-decoration.bottom-left,
+    .corner-decoration.bottom-right {
+        bottom: 1rem;
+    }
+    
+    .corner-decoration.top-left,
+    .corner-decoration.bottom-left {
+        left: 1rem;
+    }
+    
+    .corner-decoration.top-right,
+    .corner-decoration.bottom-right {
+        right: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .signup-container {
+        padding: 1.75rem 1.25rem;
+        border-radius: 20px;
+        width: 98%;
+    }
+    
+    .signup-title {
+        font-size: 1.75rem;
+    }
+    
+    .signup-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .google-signup-btn {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .corner-decoration {
+        display: none;
+    }
+}
+
+@media (max-width: 320px) {
+    .signup-container {
+        padding: 1.5rem 1rem;
+    }
+    
+    .signup-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .signup-container {
+        border-width: 4px;
+    }
+    
+    .google-signup-btn {
+        border-width: 4px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .floating-square,
+    .spinner-ring {
+        animation: none;
+    }
+    
+    .signup-container {
+        animation: none;
+    }
+}
+
+/* Focus states for accessibility */
+.google-signup-btn:focus-visible {
+    outline: 3px solid #000000;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .signup-page {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .bg-pattern,
+    .grid-overlay,
+    .corner-decoration,
+    .floating-square {
+        display: none !important;
+    }
+    
+    .signup-container {
+        box-shadow: none !important;
+        border: 2px solid black !important;
+    }
+}
