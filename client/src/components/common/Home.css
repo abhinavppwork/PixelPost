@@ -364,30 +364,7 @@ body {
     margin: 0 auto;
 }
 
-/* Scroll Down Button */
-.scroll-down {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background: #000000;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    animation: bounce 2s infinite;
-    z-index: 1000;
-}
-
-.scroll-down:hover {
-    transform: scale(1.1);
-}
+/* Removed scroll-down button */
 
 /* Animations */
 @keyframes slideInLeft {
@@ -434,17 +411,7 @@ body {
     }
 }
 
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-10px);
-    }
-    60% {
-        transform: translateY(-5px);
-    }
-}
+/* Removed bounce animation */
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -796,34 +763,14 @@ body {
 }
 
 /* Technology Icon Colors */
-.react-icon {
-    background: #61dafb;
-    border-color: #61dafb;
-}
-
-.mongodb-icon {
-    background: #47a248;
-    border-color: #47a248;
-}
-
-.nodejs-icon {
-    background: #339933;
-    border-color: #339933;
-}
-
-.express-icon {
+.react-icon,
+.mongodb-icon,
+.nodejs-icon,
+.express-icon,
+.firebase-icon,
+.github-icon {
     background: #000000;
     border-color: #000000;
-}
-
-.firebase-icon {
-    background: #ffca28;
-    border-color: #ffca28;
-}
-
-.github-icon {
-    background: #333333;
-    border-color: #333333;
 }
 
 .tech-item:hover .tech-icon {

@@ -113,16 +113,6 @@ function Home() {
     }
   }, [currentUser?.role, error]);
 
-  const scrollToFeatures = () => {
-    const features = document.querySelector('.features');
-    if (features) {
-      features.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  };
-
   return (
     <div className="home-container">
       {!firebaseUser && (
@@ -345,9 +335,6 @@ function Home() {
         </div>
       )}
 
-      <button className="scroll-down" onClick={scrollToFeatures}>
-        <i className="bi bi-chevron-down"></i>
-      </button>
     </div>
   );
 }
