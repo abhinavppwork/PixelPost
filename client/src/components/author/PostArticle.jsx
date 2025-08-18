@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { api, withAuth } from '../../lib/api';
 import { userAuthorContextObj } from "../../contexts/userAuthorContext";
 import { useNavigate } from 'react-router-dom';
 import { auth } from "../../firebaseconfigurations/config";
@@ -50,14 +51,10 @@ function PostArticle() {
       articleObj.comments = [];
       articleObj.isArticleActive = true;
 
-      let res = await axios.post(
-        'http://localhost:3000/author-api/article',
+      let res = await api.post(
+        '/author-api/article',
         articleObj,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        withAuth(token)
       );
 
       if (res.status === 201) {

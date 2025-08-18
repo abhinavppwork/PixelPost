@@ -5,16 +5,16 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
+// Your web app's Firebase configuration (sourced from Vite env)
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDFJshOtbUIhn_uN8D6wbUJy8xTvuouoYQ",
-  authDomain: "pixelpost-c49ea.firebaseapp.com",
-  projectId: "pixelpost-c49ea",
-  storageBucket: "pixelpost-c49ea.firebasestorage.app",
-  messagingSenderId: "219976139270",
-  appId: "1:219976139270:web:30e5002d4c9fe75f4df987",
-  measurementId: "G-57DJEVQHZZ"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

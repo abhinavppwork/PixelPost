@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, useMemo } from "react";
 import axios from "axios";
+import { api, withAuth } from "../../lib/api";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebaseconfigurations/config"
 import { onAuthStateChanged } from "firebase/auth";
@@ -34,11 +35,7 @@ function Articles() {
       if (!firebaseUser) return;
 
       const token = await firebaseUser.getIdToken(); // ✅ Firebase token
-      const res = await axios.get("http://localhost:3000/author-api/articles", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await api.get("/author-api/articles", withAuth(token));
 
       if (res.data.message === "articles") {
         setArticles(res.data.payload);

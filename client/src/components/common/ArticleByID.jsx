@@ -5,6 +5,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete, MdRestore } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { api, withAuth } from "../../lib/api";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebaseconfigurations/config";
 import DefaultAvatar from "../../assets/Pixel.png";
@@ -56,14 +57,10 @@ function ArticleByID() {
         "-" +
         currentDate.getFullYear();
 
-      const res = await axios.put(
-        `http://localhost:3000/author-api/article/${articleAfterChanges.articleId}`,
+      const res = await api.put(
+        `/author-api/article/${articleAfterChanges.articleId}`,
         articleAfterChanges,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        withAuth(token)
       );
 
       if (res.data.message === "article updated") {
@@ -98,14 +95,10 @@ function ArticleByID() {
       const updatedArticle = { ...articleData, isArticleActive: false };
       const token = await firebaseUser.getIdToken();
 
-      const res = await axios.put(
-        `http://localhost:3000/author-api/articles/${updatedArticle.articleId}`,
+      const res = await api.put(
+        `/author-api/articles/${updatedArticle.articleId}`,
         updatedArticle,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        withAuth(token)
       );
 
       if (res.data.message === "article deleted or restored") {
@@ -125,14 +118,10 @@ function ArticleByID() {
       const updatedArticle = { ...articleData, isArticleActive: true };
       const token = await firebaseUser.getIdToken();
 
-      const res = await axios.put(
-        `http://localhost:3000/author-api/articles/${updatedArticle.articleId}`,
+      const res = await api.put(
+        `/author-api/articles/${updatedArticle.articleId}`,
         updatedArticle,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        withAuth(token)
       );
 
       if (res.data.message === "article deleted or restored") {
@@ -152,14 +141,10 @@ function ArticleByID() {
       commentObj.nameOfUser = currentUser.firstName || firebaseUser.displayName;
       const token = await firebaseUser.getIdToken();
 
-      const res = await axios.put(
-        `http://localhost:3000/user-api/comment/${articleData.articleId}`,
+      const res = await api.put(
+        `/user-api/comment/${articleData.articleId}`,
         commentObj,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        withAuth(token)
       );
 
       if (res.data.message === "comment added") {

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { api, withAuth } from "../../lib/api";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebaseconfigurations/config";
 import { userAuthorContextObj } from "../../contexts/userAuthorContext";
@@ -77,16 +78,16 @@ function Home() {
         role: selectedRole,
       };
       if (selectedRole === "author") {
-        res = await axios.post(
-          "http://localhost:3000/author-api/author",
+        res = await api.post(
+          "/author-api/author",
           apiPayload,
-          { headers: { Authorization: `Bearer ${token}` } }
+          withAuth(token)
         );
       } else {
-        res = await axios.post(
-          "http://localhost:3000/user-api/user",
+        res = await api.post(
+          "/user-api/user",
           apiPayload,
-          { headers: { Authorization: `Bearer ${token}` } }
+          withAuth(token)
         );
       }
 
