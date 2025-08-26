@@ -60,6 +60,7 @@ function Home() {
     const selectedRole = e.target.value;
     const updatedUser = { ...currentUser, role: selectedRole };
 
+    console.log(updatedUser);
     try {
       if (!firebaseUser) {
         setError("Please log in first.");
@@ -77,6 +78,7 @@ function Home() {
         profileImageUrl: updatedUser.profileImageUrl,
         role: selectedRole,
       };
+
       if (selectedRole === "author") {
         res = await api.post(
           "/author-api/author",
