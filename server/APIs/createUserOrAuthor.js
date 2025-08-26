@@ -2,6 +2,7 @@ const userAuthor =require("../models/userAuthorModel");
 async function createUserOrAuthor(req,res){
     const newUserAuthor = req.body;
     const userinDb = await userAuthor.findOne({email:newUserAuthor.email});
+    console.log(userinDb);
     //if user existed
     if(userinDb !== null){
         //check with role
