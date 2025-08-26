@@ -13,6 +13,7 @@ function Home() {
   const navigate = useNavigate();
   const [firebaseUser, setFirebaseUser] = useState(null);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const wordsRef = useRef([]);
 
   // ✅ Track Firebase Auth State
@@ -57,6 +58,7 @@ function Home() {
   // ✅ Handle role selection
   async function onSelectRole(e) {
     setError("");
+    setIsLoading(true);
     const selectedRole = e.target.value;
     const updatedUser = { ...currentUser, role: selectedRole };
 
@@ -64,6 +66,7 @@ function Home() {
     try {
       if (!firebaseUser) {
         setError("Please log in first.");
+        setIsLoading(false);
         return;
       }
 
@@ -103,6 +106,8 @@ function Home() {
     } catch (err) {
       console.error("Axios error:", err);
       setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -298,6 +303,15 @@ function Home() {
                 </div>
               )}
 
+              {isLoading && (
+                <div className="loading-overlay">
+                  <div className="loading-spinner">
+                    <div className="spinner"></div>
+                    <p>Setting up your account...</p>
+                  </div>
+                </div>
+              )}
+
               <div className="role-options">
                 <div className="role-option">
                   <input 
@@ -307,6 +321,7 @@ function Home() {
                     value="author" 
                     className="role-input" 
                     onChange={onSelectRole}
+                    disabled={isLoading}
                   />
                   <label htmlFor="author" className="role-label" aria-label="Choose Author role">
                     <div className="icon-circle">
@@ -324,6 +339,7 @@ function Home() {
                     value="user" 
                     className="role-input" 
                     onChange={onSelectRole}
+                    disabled={isLoading}
                   />
                   <label htmlFor="user" className="role-label" aria-label="Choose Reader role">
                     <div className="icon-circle">

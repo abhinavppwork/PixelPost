@@ -264,7 +264,7 @@ body {
 
 .auth-section .role-text {
     font-weight: 600;
-    color: #000000;
+    color: #494040;
 }
 
 /* Black & White enhanced icon container */
@@ -283,7 +283,7 @@ body {
 
 .auth-section .role-label:hover .icon-circle {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(149, 126, 126, 0.15);
 }
 
 .auth-section .role-input:checked + .role-label .icon-circle {

@@ -14,6 +14,7 @@ function Articles() {
   const [error, setError] = useState("");
   const [firebaseUser, setFirebaseUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [articlesLoading, setArticlesLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -34,6 +35,7 @@ function Articles() {
     try {
       if (!firebaseUser) return;
 
+      setArticlesLoading(true);
       const token = await firebaseUser.getIdToken(); // ✅ Firebase token
       const res = await api.get("/author-api/articles", withAuth(token));
 
@@ -46,6 +48,8 @@ function Articles() {
     } catch (err) {
       console.error("Error fetching articles:", err);
       setError("Failed to load articles. Please try again.");
+    } finally {
+      setArticlesLoading(false);
     }
   }
 
@@ -262,7 +266,12 @@ function Articles() {
 
       {/* Articles Grid */}
       <div className="articles-grid">
-        {filteredArticles.length === 0 ? (
+        {articlesLoading ? (
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Loading articles...</p>
+          </div>
+        ) : filteredArticles.length === 0 ? (
           <div className="no-articles">
             <h3>No articles found</h3>
             <p>Try adjusting your search criteria or filters.</p>
