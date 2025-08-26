@@ -4,24 +4,28 @@ require('dotenv').config();
 const userApp = require('./APIs/userApi')
 const authorApp = require("./APIs/authorApi")
 const adminApp = require("./APIs/adminApi")
-const cors = require("cors")
+const cors = require("cors");
+
 const allowedOrigins = [
   "http://localhost:5173",
   "https://pixel-post-ten.vercel.app"
-]
+];
+
 app.use(cors({
   origin: function(origin, callback) {
-    // allow REST tools or no origin
-    if (!origin) return callback(null, true)
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      return callback(null, true)
+    if (!origin) return callback(null, true); // allow requests like curl/postman
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
     }
-    return callback(new Error('Not allowed by CORS'))
+    return callback(new Error("Not allowed by CORS"));
   },
-  methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type","Authorization"],
-  credentials: false
-}))
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true  // allow cookies/tokens if you need them
+}));
+
+// handle preflight
+app.options("*", cors());
 
 
 const mongoose = require("mongoose");
